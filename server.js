@@ -1,16 +1,25 @@
 const puppeteer = require('puppeteer');
 
-puppeteer.launch({ headless: false }).then((browser)=> {
-  const page = browser.newPage();
-  return page;
-}).then(((page) => {
-  return page.goto('https://quotes.toscrape.com/search.aspx');
-})).then((page_html) => {
-  (async () => {
-    console.log(await page_html.text());
-  })();
-  
-});
-// const page = browser.newPage();
-// page.goto('https://quotes.toscrape.com/search.aspx');
-// console.log(page);
+const serach_words = ['ducks'];
+const search_term = serach_words.join('+');
+const search_url = `http://www.amazon.com/s?url=search-alias%3Daps&field-keywords=${serach_words}`;
+
+puppeteer
+  .launch()
+  .then(function(browser) {
+    return browser.newPage();
+  })
+  .then(function(page) {
+    return page.goto(search_url)
+      .then(function() {
+        return page.waitForSelector('.s-result-item').then(function() {
+          return page.content();
+        });
+      });
+  })
+  .then(function(html) {
+    console.log(html);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
