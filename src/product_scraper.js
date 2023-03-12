@@ -14,8 +14,6 @@ function get_products(search_terms) {
         return page.waitForSelector('.s-result-item').then(function() {
             return page.$$eval('.s-result-item', function(items) {
             return items.map(function(item) {
-                console.log(item);
-                console.log("=================");
                 const nameElement = item.querySelector('h2');
                 const name = nameElement ? nameElement.innerText.trim() : '';
                 const priceElement = item.querySelector('.a-price-whole');
@@ -24,7 +22,12 @@ function get_products(search_terms) {
                 const rating = ratingElement ? ratingElement.innerText.trim() : '';
                 const imageElement = item.querySelector('img');
                 const image = imageElement ? imageElement.src : '';
-                return { name, price, rating, image };
+                // if (image !== '') {
+                //     console.log('kkk');
+                //     console.log(fetch(image));
+                // };
+                return { "name": name, "price": price, "rating": rating, 
+                "image":"public/images/skimountain.jpg"};
             });
             }
             );
@@ -36,7 +39,7 @@ function get_products(search_terms) {
         return html;
     })
     .catch(function(err) {
-    console.log(err);
+        console.log(err);
     });
 
 }
