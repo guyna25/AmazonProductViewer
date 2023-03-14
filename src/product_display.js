@@ -16,7 +16,6 @@ function get_product_grid_html(items) {
         body:items_html
     }
     );
-    console.log(__dirname);
     return items_html;
 };
 

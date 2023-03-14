@@ -4,7 +4,7 @@ function get_products(search_terms) {
     const search_term = search_terms.join('+');
     const search_url = `http://www.amazon.com/s?url=search-alias%3Daps&field-keywords=${search_terms}`;
     return puppeteer
-    .launch()
+    .launch({headless:true})
     .then(function(browser) {
     return browser.newPage();
     })
@@ -27,7 +27,7 @@ function get_products(search_terms) {
                 //     console.log(fetch(image));
                 // };
                 return { "name": name, "price": price, "rating": rating, 
-                "image":"public/images/skimountain.jpg"};
+                "image":image};
             });
             }
             );
