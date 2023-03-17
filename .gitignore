@@ -3,3 +3,4 @@ product_viwer_pass.txt
 product_viwer_pass.json
 node_modules
 .gitattributes
+.env
