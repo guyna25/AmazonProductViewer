@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const {get_products} = require('./product_scraper');
 const {get_product_grid_html} = require('./product_display');
 const {get_full_access_url} = require('./db_password_loader');
+const {createProducts, getAllProducts} = require('./models/products.model');
 
 
 //constants
@@ -15,16 +16,20 @@ const mongo_pass_path = 'product_viwer_pass.json';
 const MONGO_URL = get_full_access_url(mongo_pass_path);
 
 //variables
-let product_arr = [];
 const server = http.createServer();
 
 async function startServer() {
     await mongoose.connect(MONGO_URL);
     get_products(serach_words).then((vals) => {
-        product_arr = vals.filter((p) => {
+        let product_arr = vals.filter((p) => {
             return !(p.name == '' && p.price == '' && p.rating == '' && p.image == '');
         });
         console.log('Loaded products');
+        createProducts(product_arr);
+        getAllProducts().then((data) => {
+            console.log(data);
+        }
+        );
     });
 };
 

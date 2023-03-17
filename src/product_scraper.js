@@ -17,15 +17,11 @@ function get_products(search_terms) {
                 const nameElement = item.querySelector('h2');
                 const name = nameElement ? nameElement.innerText.trim() : '';
                 const priceElement = item.querySelector('.a-price-whole');
-                const price = priceElement ? priceElement.innerText.trim() : '';
+                const price = priceElement ? priceElement.innerText.match('[0-9|\.]+', '')[0] : '';
                 const ratingElement = item.querySelector('.a-icon-star-small > .a-icon-alt');
                 const rating = ratingElement ? ratingElement.innerText.trim() : '';
                 const imageElement = item.querySelector('img');
                 const image = imageElement ? imageElement.src : '';
-                // if (image !== '') {
-                //     console.log('kkk');
-                //     console.log(fetch(image));
-                // };
                 return { "name": name, "price": price, "rating": rating, 
                 "image":image};
             });
