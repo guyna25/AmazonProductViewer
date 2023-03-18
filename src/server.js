@@ -6,7 +6,7 @@ require('dotenv').config();
 //internal imports
 const {get_products} = require('./services/product_scraper');
 const {get_product_grid_html} = require('./views/product_display');
-const {createProducts, getAllProducts} = require('./models/products.model');
+const {ProductsModel,createProducts, getAllProducts} = require('./models/products.model');
 const {mongoConnect} = require('./services/db');
 
 //constants
@@ -23,9 +23,10 @@ async function startServer() {
             return !(p.name == '' && p.price == '' && p.rating == '' && p.image == '');
         });
         console.log('Loaded products');
-        createProducts(product_arr);
+        // createProducts(product_arr);
+        new ProductsModel().createMany(product_arr);
         getAllProducts().then((data) => {
-            console.log(data);
+            // console.log(data);
         }
         );
     });
