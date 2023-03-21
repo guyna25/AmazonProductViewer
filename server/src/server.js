@@ -2,12 +2,14 @@
 const http = require('http');
 const path = require('path');
 const mongoose = require('mongoose');
-require('dotenv').config();
+console.log(__dirname);
+require('dotenv').config({ path: path.join(__dirname, '..', '.env')});
 //internal imports
 const {get_products} = require('./services/product_scraper');
 const {get_product_grid_html} = require('./views/product_display');
 const {ProductsModel} = require('./models/products.model');
 const {mongoConnect} = require('./services/db');
+const { dirname } = require('path');
 
 //constants
 const PORT = 3000;

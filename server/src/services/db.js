@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+// require('dotenv').config();
 const {get_full_access_url} = require('./db_password_loader');
 const MONGO_URL = get_full_access_url(process.env.DB_USERNAME, process.env.DB_PASSWORD, process.env.CLUSTER_URL);
 
