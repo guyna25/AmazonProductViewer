@@ -3,7 +3,17 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+String _msg = "";
+
+void _testServer() {
+  get("http://localhost:3000/products_test").then((res) {
+    _msg = "Success";
+    print(res.body);
+  });
+}
+
 void main() {
+  _testServer();
   runApp(const MyApp());
 }
 
@@ -33,16 +43,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _msg = "";
-
-  void _testServer() {
-    get("http://localhost:3000/products_test").then((res) {
-      setState(() {
-        _msg = res.body;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
