@@ -10,7 +10,7 @@ function get_products(search_terms) {
     })
     .then(function(page) {
     return page.goto(search_url)
-        .then(function() {
+        .then(function() {        
         return page.waitForSelector('.s-result-item').then(function() {
             return page.$$eval('.s-result-item', function(items) {
             return items.map(function(item) {
@@ -39,7 +39,7 @@ function get_products(search_terms) {
         });
     })
     .then(function(html) {
-        console.log(html);
+        // console.log(html);
         return html;
     })
     .catch(function(err) {

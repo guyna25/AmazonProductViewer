@@ -2,7 +2,6 @@
 const http = require('http');
 const path = require('path');
 const mongoose = require('mongoose');
-console.log(__dirname);
 require('dotenv').config({ path: path.join(__dirname, '..', '.env')});
 //internal imports
 const {get_products} = require('./services/product_scraper');
@@ -20,7 +19,9 @@ const server = http.createServer();
 const product_db = new ProductsModel();
 
 async function startServer() {
-    mongoConnect();
+    await mongoConnect();
+    // const { networkInterfaces } = require('os');
+    // console.log(networkInterfaces());
     get_products(serach_words).then((vals) => {
         let product_arr = vals.filter((p) => {
             return !(p.name == '' && p.price == '' && p.rating == '' && p.image == '');
@@ -44,7 +45,15 @@ server.on('request', (req, res)=> {
         const resp = get_product_grid_html(product_arr);
         res.write(resp);
         res.end();
-    } 
+    } else if (items.length == 2 && items[1] === 'products_test') {
+        product_db.readMany({}).then( (vals) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            res.write(JSON.stringify(vals));
+            res.end();
+        });
+    }
     else {
         res.statusCode = 404;
         res.end();
