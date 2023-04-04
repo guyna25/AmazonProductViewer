@@ -1,6 +1,7 @@
 //external imports
 const http = require('http');
 const path = require('path');
+var url = require('url');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env')});
 //internal imports
@@ -20,25 +21,13 @@ const product_db = new ProductsModel();
 
 async function startServer() {
     await mongoConnect();
-    // const { networkInterfaces } = require('os');
-    // console.log(networkInterfaces());
-    get_products(serach_words).then((vals) => {
-        let product_arr = vals.filter((p) => {
-            return !(p.name == '' && p.price == '' && p.rating == '' && p.image == '');
-        });
-        console.log('Loaded products');
-        product_db.createMany(product_arr);
-        product_db.readMany({}).then((data) => {
-            // console.log(data);
-        }
-        );
-    });
 };
 
 startServer();
   
 server.on('request', (req, res)=> {
-    const items = req.url.split('/');
+    var requestData = url.parse(req.url, true);
+    const items = requestData.pathname.split('/');
     if (items.length == 2 && items[1] === 'products') {  
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');
@@ -47,6 +36,18 @@ server.on('request', (req, res)=> {
         res.end();
     } else if (items.length == 2 && items[1] === 'products_test') {
         product_db.readMany({}).then( (vals) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            res.write(JSON.stringify(vals));
+            res.end();
+        });
+    }
+    else if (items.length == 2 && items[1] === 'search') {
+        let q = requestData.query.q;
+        get_products([q]).then((vals) => {
+            console.log('Yggc');
+            product_db.createMany(vals);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/html');
             res.setHeader('Access-Control-Allow-Origin', '*')
