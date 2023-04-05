@@ -28,37 +28,25 @@ startServer();
 server.on('request', (req, res)=> {
     var requestData = url.parse(req.url, true);
     const items = requestData.pathname.split('/');
-    if (items.length == 2 && items[1] === 'products') {  
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        const resp = get_product_grid_html(product_arr);
-        res.write(resp);
-        res.end();
-    } else if (items.length == 2 && items[1] === 'products_test') {
-        product_db.readMany({}).then( (vals) => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/html');
-            res.setHeader('Access-Control-Allow-Origin', '*')
-            res.write(JSON.stringify(vals));
-            res.end();
-        });
-    }
-    else if (items.length == 2 && items[1] === 'search') {
+    if  (items.length == 2 && items[1] === 'search') {
         let q = requestData.query.q;
-        get_products([q]).then((vals) => {
-            console.log('Yggc');
-            product_db.createMany(vals);
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/html');
-            res.setHeader('Access-Control-Allow-Origin', '*')
-            res.write(JSON.stringify(vals));
-            res.end();
-        });
+        if (Object.hasOwn(requestData.query, 'q')) {
+            //if the url is correct and there is an actual query
+            get_products([q]).then((vals) => {
+                console.log('Yggc');
+                product_db.createMany(vals);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'text/html');
+                res.setHeader('Access-Control-Allow-Origin', '*')
+                res.write(JSON.stringify(vals));
+                res.end();
+            });
+            return;
+        }
     }
-    else {
-        res.statusCode = 404;
-        res.end();
-    }
+    //default - return error, shouldn't happen from regular use of app
+    res.statusCode = 404;
+    res.end();
 });
 
 server.listen(PORT, () => {

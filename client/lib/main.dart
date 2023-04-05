@@ -1,9 +1,8 @@
-import 'dart:convert';
-
-import 'package:http/http.dart';
-
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import './widgets/product.dart';
 
 void main() {
   runApp(const AppBase());
@@ -80,15 +79,10 @@ class _AppBaseState extends State<AppBase> {
                   childAspectRatio: 3 / 2,
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20),
-              itemCount: _currProducts.length,
+              itemCount:
+                  _currProducts.isNotEmpty ? 20 : 0, //TODO determine later
               itemBuilder: (BuildContext ctx, index) {
-                return Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Text(_currProducts[index]["name"]!),
-                );
+                return ProductItem(product: Map.from(_currProducts[index]));
               }),
         ));
   }
