@@ -9,43 +9,37 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Row(
-      children: [
-        Container(
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      // height: 150.0,
+      // width: 200.0,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            width: 100,
             child: Image.network(
-          product["image"]!,
-          fit: BoxFit.cover,
-        )),
-        Column(
-          children: [
-            Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text(product["name"]!)),
-            Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text(product["volume"]!)),
-            Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text(product["price"]!)),
-            Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Text(product["rating"]!)),
-          ],
-        ),
-      ],
-    ));
+              product["image"]!,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          SizedBox(
+            height: 30,
+            width: 100,
+            child: Text(
+              product["name"]!,
+              maxLines: 1,
+              overflow: TextOverflow.clip,
+            ),
+          ),
+          Text(product["volume"]!),
+          Text(product["price"]!),
+          Text(product["rating"]!),
+        ],
+      ),
+    );
   }
 }

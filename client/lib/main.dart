@@ -27,11 +27,15 @@ class _AppBaseState extends State<AppBase> {
     get(
       Uri.parse("http://localhost:3000/search?q=${q_param}"),
     ).then((res) {
-      setState(() {
-        // _currProducts = res.body;
-        _currProducts = json.decode(res.body);
-        print("Updated products for search term: ${q_param}");
-      });
+      if (res.statusCode == 200) {
+        setState(() {
+          // _currProducts = res.body;
+          _currProducts = json.decode(res.body);
+          print("Updated products for search term: $q_param");
+        });
+      } else {
+        //TODO decide what to display in error
+      }
     });
   }
 
@@ -74,11 +78,11 @@ class _AppBaseState extends State<AppBase> {
                 onTap: () => Navigator.pop(context))
           ])),
           body: GridView.builder(
+              padding: EdgeInsets.all(5),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200,
-                  childAspectRatio: 3 / 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20),
+                  maxCrossAxisExtent: 250,
+                  crossAxisSpacing: 100,
+                  mainAxisSpacing: 100),
               itemCount:
                   _currProducts.isNotEmpty ? 20 : 0, //TODO determine later
               itemBuilder: (BuildContext ctx, index) {
