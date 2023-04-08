@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductItem extends StatelessWidget {
   final Map<String, String> product;
@@ -35,9 +36,30 @@ class ProductItem extends StatelessWidget {
               overflow: TextOverflow.clip,
             ),
           ),
-          Text(product["volume"]!),
-          Text(product["price"]!),
-          Text(product["rating"]!),
+          Text(
+            product["quantity"]!,
+            maxLines: 1,
+          ),
+          Text(
+            product["price"]!,
+            maxLines: 1,
+          ),
+          RatingBar.builder(
+            initialRating: (double.parse(product["rating"]!) * 2).round() / 2,
+            minRating: 0,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemSize: 30.0,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => const Icon(
+              Icons.star,
+              color: Colors.amber,
+            ),
+            onRatingUpdate: (rating) {
+              print(rating);
+            },
+          ),
         ],
       ),
     );

@@ -80,7 +80,7 @@ class _AppBaseState extends State<AppBase> {
           body: GridView.builder(
               padding: EdgeInsets.all(5),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 250,
+                  maxCrossAxisExtent: 300,
                   crossAxisSpacing: 100,
                   mainAxisSpacing: 100),
               itemCount:
