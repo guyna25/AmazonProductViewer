@@ -23,15 +23,15 @@ class _AppBaseState extends State<AppBase> {
     'Lotion',
   ];
 
-  void _sendQuery(String q_param) {
+  void _sendQuery(String qParam) {
     get(
-      Uri.parse("http://localhost:3000/search?q=${q_param}"),
+      Uri.parse("http://localhost:3000/search?q=${qParam}"),
     ).then((res) {
       if (res.statusCode == 200) {
         setState(() {
           // _currProducts = res.body;
           _currProducts = json.decode(res.body);
-          print("Updated products for search term: $q_param");
+          print("Updated products for search term: $qParam");
         });
       } else {
         //TODO decide what to display in error
@@ -86,6 +86,8 @@ class _AppBaseState extends State<AppBase> {
               itemCount:
                   _currProducts.isNotEmpty ? 20 : 0, //TODO determine later
               itemBuilder: (BuildContext ctx, index) {
+                // _currProducts[index].forEach(
+                //     (key, value) => print([key, value, value.runtimeType]));
                 return ProductItem(product: Map.from(_currProducts[index]));
               }),
         ));

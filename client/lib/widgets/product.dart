@@ -10,39 +10,53 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String originalAmount = "${product["quantity"]} (${product["unit"]})";
+    String normalizedAmount = product["ml_quantity"] == null
+        ? "Unavailable"
+        : "${(double.parse(product["ml_quantity"]!) / 100).toStringAsFixed(2)}/100ml";
     return Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(8.0),
+      color: const Color.fromARGB(5, 37, 220, 187),
       // height: 150.0,
       // width: 200.0,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             height: 100,
             width: 100,
             child: Image.network(
               product["image"]!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
           SizedBox(
             height: 30,
             width: 100,
             child: Text(
               product["name"]!,
-              maxLines: 1,
               overflow: TextOverflow.clip,
             ),
           ),
-          Text(
-            product["quantity"]!,
-            maxLines: 1,
+          Text(normalizedAmount),
+          const SizedBox(
+            height: 3,
           ),
-          Text(
-            product["price"]!,
-            maxLines: 1,
+          Row(
+            children: [
+              Text(
+                originalAmount,
+                maxLines: 1,
+              ),
+              const SizedBox(width: 16),
+              Text(
+                "${product["price"].toString()}\$",
+                maxLines: 1,
+              ),
+            ],
           ),
           RatingBar.builder(
             initialRating: (double.parse(product["rating"]!) * 2).round() / 2,
@@ -56,9 +70,7 @@ class ProductItem extends StatelessWidget {
               Icons.star,
               color: Colors.amber,
             ),
-            onRatingUpdate: (rating) {
-              print(rating);
-            },
+            onRatingUpdate: (rating) {},
           ),
         ],
       ),

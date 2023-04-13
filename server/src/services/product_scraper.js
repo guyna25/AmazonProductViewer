@@ -3,6 +3,19 @@ const puppeteer = require('puppeteer');
 function get_products(search_terms) {
   const search_term = search_terms.join('+');
   const search_url = `http://www.amazon.com/s?url=search-alias%3Daps&field-keywords=${search_term}`;
+  const unitToMl = {
+    'lb': 453.592, // pound
+    'oz': 28.3495, // ounce
+    'g': 1, // gram
+    'kg': 1000, // kilogram
+    'fl': 29.5735,// usually means fluid ounce
+    'fl oz': 29.5735, // fluid ounce
+    'mL': 1, // milliliter
+    'L': 1000, // liter
+    'item': 1, // item
+    'piece': 1, // piece
+    'pack': 1 // pack
+  };
 
   return puppeteer.launch({headless:true})
     .then(function(browser) {
@@ -12,7 +25,7 @@ function get_products(search_terms) {
             .then(function() {
               return page.waitForSelector('.s-result-item')
                 .then(function() {
-                  return page.$$eval('.s-result-item', function(items, search_term) {
+                  return page.$$eval('.s-result-item', function(items, search_term, unitMap) {
                     return items.map(function(item) {
                       //get name
                       const nameElement = item.querySelector('h2');
@@ -38,6 +51,12 @@ function get_products(search_terms) {
                       }
                       const quantity = volume_match[1].replace(',', '');
                       const unit = volume_match[2];
+                      if (!(unit.toLowerCase() in unitMap)) {
+                        console.log("========================================");
+                        console.log(unitMap);
+                        console.log("========================================");
+                        return -1;
+                      }
                       return {
                           "search_term": search_term,
                           "name": name,
@@ -45,10 +64,11 @@ function get_products(search_terms) {
                           "unit": unit,
                           "price": price,
                           "rating": rating_match[0],
-                          "image": image
+                          "image": image,
+                          "ml_quantity": (quantity * unitMap[unit.toLowerCase()]).toFixed(4),
                         };
                     });
-                  }, search_term).catch(function(err) {
+                  }, search_term, unitToMl).catch(function(err) {
                     console.log(err);
                     return -1;
                   });
@@ -62,7 +82,7 @@ function get_products(search_terms) {
                     return -1;
                 }
               let res = html.filter((val) => {
-                return val !== -1 && val.name != '';
+                return val !== -1 && val.name != '' && val.price !== '';
               });
               console.log(res);
               return res;

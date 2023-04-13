@@ -7,5 +7,6 @@ const productsSchema = mongoose.Schema({
     rating: String,
     price: Number,
     image: String,
+    ml_unit: Number,
 });
 module.exports = mongoose.model('Product', productsSchema);
